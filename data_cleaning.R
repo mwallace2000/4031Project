@@ -101,7 +101,7 @@ good_names10 = names[grepl('Estimate..GROSS.RENT..No.rent.paid',names,fixed=TRUE
 good_names11 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2005.or.later',names,fixed=TRUE)]
 good_names12 = names[grepl('Estimate..ROOMS..Median.rooms',names,fixed=TRUE)]
 good_names13 = names[grepl('Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit',names,fixed=TRUE)]
-good_names14 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2000.to.2004',names,fixed=TRUE)]
+good_names14 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later',names,fixed=TRUE)]
 good_names15 = names[grepl('Percent..HOUSE.HEATING.FUEL..Utility.gas',names,fixed=TRUE)]
 good_names16 = names[grepl('Percent..SELECTED.CHARACTERISTICS..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
 good_names17 = names[grepl('Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household',names,fixed=TRUE)]
@@ -112,10 +112,12 @@ good_names21 = names[grepl('Estimate..GROSS.RENT..Median..dollars',names,fixed=T
 good_names22 = names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2015.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
 good_names23 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2010.or.later',names,fixed=TRUE)]
 good_names24 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2014.or.later',names,fixed=TRUE)]
+good_names25 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later',names,fixed=TRUE)]
+good_names26 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2017.or.later',names,fixed=TRUE)]
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
                good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, good_names22,
-               good_names23,good_names24)
+               good_names23,good_names24,good_names25,good_names26)
 
 ix <- which(names %in% good_names)
 all_data <- all_data[,ix]

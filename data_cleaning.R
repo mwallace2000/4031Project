@@ -110,9 +110,12 @@ good_names19 = names[grepl('Estimate..VALUE..Median..dollars',names,fixed=TRUE)]
 good_names20 = names[grepl('Estimate..VALUE..Owner.occupied.units..Median..dollars',names,fixed=TRUE)]
 good_names21 = names[grepl('Estimate..GROSS.RENT..Median..dollars',names,fixed=TRUE)]
 good_names22 = names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2015.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
+good_names23 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2010.or.later',names,fixed=TRUE)]
+good_names24 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2014.or.later',names,fixed=TRUE)]
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
-               good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, good_names22)
+               good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, good_names22,
+               good_names23,good_names24)
 
 ix <- which(names %in% good_names)
 all_data <- all_data[,ix]

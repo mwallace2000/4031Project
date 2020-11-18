@@ -79,23 +79,26 @@ for (i in (names(all_data)))
 
 i = c(3:6719)
 all_data[,i] <- apply(all_data[ , i], 2, function(x) as.numeric(as.character(x)))
-all_data$Percent_Change_in_Median_Home_Value_2010_to_2018 <- (all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2018 - all_data$Estimate..VALUE..Median..dollars..2010)/(all_data$Estimate..VALUE..Median..dollars..2010)*100
+all_data$Percent_Change_in_Median_Home_Value_2010_to_2014 <- (all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014 - all_data$Estimate..VALUE..Median..dollars..2010)/(all_data$Estimate..VALUE..Median..dollars..2010)*100
+all_data$Percent_Change_in_Median_Home_Value_2014_to_2018 <- (all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2018 - all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014)/(all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014)*100
 
-all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2010_to_2018),]
-all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2010_to_2018),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
 
 g = lm(all_data$Percent_Change_in_Median_Home_Value_2010_to_2018~all_data$Estimate..UNITS.IN.STRUCTURE..Total.housing.units.2010, na.action=na.exclude)
 summary(g)
 
 names = names(all_data)
-good_names1 = names[grepl('Percent..HOUSING.OCCUPANCY..Vacant.housing.units',names,fixed=TRUE)]
-good_names2 = names[grepl('Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate',names,fixed=TRUE)]
-good_names3 = names[grepl('Estimate..HOUSING.OCCUPANCY..Total.housing.units',names,fixed=TRUE)]
-good_names4 = names[grepl('Percent..HOUSING.OCCUPANCY..Occupied.housing.units',names,fixed=TRUE)]
-good_names5 = names[grepl('Percent..HOUSING.TENURE..Renter.occupied',names,fixed=TRUE)]
-good_names6 = names[grepl('Percent..VEHICLES.AVAILABLE..No.vehicles.available',names,fixed=TRUE)]
-good_names7 = names[grepl('Percent..SELECTED.CHARACTERISTICS..No.telephone.service.available',names,fixed=TRUE)]
-good_names8 = names[grepl('Percent..SEX.AND.AGE..Male',names,fixed=TRUE)]
+good_names1 = names[grepl('Percent..HOUSING.OCCUPANCY..Vacant.housing.units',names,fixed=TRUE)] #2010-2012
+good_names2 = names[grepl('Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate',names,fixed=TRUE)] #2010-2016
+good_names3 = names[grepl('Estimate..HOUSING.OCCUPANCY..Total.housing.units.201',names,fixed=TRUE)] #2010-2018 (use only estimate. not percent.estimate)
+good_names4 = names[grepl('Percent..HOUSING.OCCUPANCY..Occupied.housing.units',names,fixed=TRUE)] #2010-2012
+good_names5 = names[grepl('Percent..HOUSING.TENURE..Renter.occupied',names,fixed=TRUE)] #2010-2012
+good_names6 = names[grepl('Percent..VEHICLES.AVAILABLE..No.vehicles.available',names,fixed=TRUE)] #2010-2012
+good_names7 = names[grepl('Percent..SELECTED.CHARACTERISTICS..No.telephone.service.available',names,fixed=TRUE)] #2010-2012
+good_names8 = names[grepl('Percent..SEX.AND.AGE..Male',names,fixed=TRUE)] #2010-2012
 good_names9 = names[grepl('Percent..UNITS.IN.STRUCTURE..1.unit..detached',names,fixed=TRUE)]
 good_names10 = names[grepl('Estimate..GROSS.RENT..No.rent.paid',names,fixed=TRUE)]
 good_names11 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2005.or.later',names,fixed=TRUE)]
@@ -141,13 +144,33 @@ good_names33 = names[grepl('Estimate..GROSS.RENT..Occupied.units.paying.rent..Me
 good_names34= names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2010.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
 #35 covers 2018
 good_names35= names[grepl('Estimate..Renter.occupied.housing.units..Occupied.housing.units..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2018.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
+good_names36 = names[grepl('Percent..HOUSING.OCCUPANCY..Total.housing.units..Vacant.housing.units',names,fixed=TRUE)] #2013-2016
+good_names37 = names[grepl('Percent.Estimate..HOUSING.OCCUPANCY..Total.housing.units..Vacant.housing.units',names,fixed=TRUE)] #2017, 2018
+good_names38 = names[grepl('Estimate..HOUSING.OCCUPANCY..Total.housing.units..Homeowner.vacancy.rate',names,fixed=TRUE)] #2017,2018 (Use Estimate not Percent.Estimate)
+good_names39 = names[grepl('Percent..HOUSING.OCCUPANCY..Total.housing.units..Occupied.housing.units',names,fixed=TRUE)] #2013-2016
+good_names40 = names[grepl('Percent.Estimate..HOUSING.OCCUPANCY..Total.housing.units..Occupied.housing.units',names,fixed=TRUE)] #2017-2018
+good_names41 = names[grepl('Percent..HOUSING.TENURE..Occupied.housing.units..Renter.occupied',names,fixed=TRUE)] #2013-2016
+good_names42 = names[grepl('Percent.Estimate..HOUSING.TENURE..Occupied.housing.units..Renter.occupied.2018',names,fixed=TRUE)] #2018
+good_names43 = names[grepl('Percent..VEHICLES.AVAILABLE..Occupied.housing.units..No.vehicles.available',names,fixed=TRUE)] #2013-2016
+good_names44 = names[grepl('Percent.Estimate..VEHICLES.AVAILABLE..Occupied.housing.units..No.vehicles.available',names,fixed=TRUE)] #2017-2018
+good_names45 = names[grepl('Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..No.telephone.service.available',names,fixed=TRUE)] #2013-2016
+good_names46 = names[grepl('Percent.Estimate..SELECTED.CHARACTERISTICS..Occupied.housing.units..No.telephone.service.available',names,fixed=TRUE)] #2017-2018
+good_names47 = names[grepl('Percent..RACE..White',names,fixed=TRUE)] #2010-2012
+good_names48 = names[grepl("Percent..RACE..Race.alone.or.in.combination.with.one.or.more.other.races..Total.population..White",names,fixed=TRUE)] #2013-2016
+good_names49 = names[grepl("Percent.Estimate..Race.alone.or.in.combination.with.one.or.more.other.races..Total.population..White",names,fixed=TRUE)] #2017-2018
+good_names50 = names[grepl('Percent..SEX.AND.AGE..Total.population..Male',names,fixed=TRUE)] #2014,2016
+good_names51 = names[grepl('Percent.Estimate..SEX.AND.AGE..Total.population..Male',names,fixed=TRUE)] #2017,2018
 
 
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
                good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, 
                good_names22, good_names25, good_names26,good_names27,good_names28,good_names29,good_names30, 
-               good_names31,good_names32, good_names33, good_names34, good_names35, 'id','Geographic.Area.Name.x','Percent_Change_in_Median_Home_Value_2010_to_2018')
+               good_names31,good_names32, good_names33, good_names34, good_names35, good_names36, good_names37, 
+               good_names38, good_names39, good_names40, good_names41,good_names42, good_names43, good_names44, 
+               good_names45, good_names46,good_names47, good_names48, good_names49, good_names50, good_names51,
+               'id','Geographic.Area.Name.x','Percent_Change_in_Median_Home_Value_2010_to_2014',
+               'Percent_Change_in_Median_Home_Value_2014_to_2018')
 
 ix <- which(names %in% good_names)
 all_data <- all_data[,ix]

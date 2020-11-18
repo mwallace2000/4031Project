@@ -1,0 +1,103 @@
+---
+title: "ProjectUpdate"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(purrr)
+library(readr)
+library(dplyr)
+library(stats)
+library(DataCombine)
+library(stringr)
+```
+
+```{r}
+files <- list.files(path ='~/ISYE 4031/ProjectData',full.names=TRUE)
+data_2010 = read.csv(files[1],skip=1,header=TRUE)
+for (i in c(2,19,20))
+{ data_2010=full_join(data_2010,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2010)[3:length(names(data_2010))] <- paste0(names(data_2010)[3:length(names(data_2010))], ".2010")
+
+data_2011 = read.csv(files[3],skip=1,header=TRUE)
+for (i in c(4,21,22))
+{ data_2011=full_join(data_2011,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2011)[3:length(names(data_2011))] <- paste0(names(data_2011)[3:length(names(data_2011))], ".2011")
+
+data_2012 = read.csv(files[5],skip=1,header=TRUE)
+for (i in c(6,23,24))
+{ data_2012=full_join(data_2012,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2012)[3:length(names(data_2012))] <- paste0(names(data_2012)[3:length(names(data_2012))], ".2012")
+
+data_2013 = read.csv(files[7],skip=1,header=TRUE)
+for (i in c(8,25,26))
+{ data_2013=full_join(data_2013,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2013)[3:length(names(data_2013))] <- paste0(names(data_2013)[3:length(names(data_2013))], ".2013")
+
+data_2014 = read.csv(files[9],skip=1,header=TRUE)
+for (i in c(10,27,28))
+{ data_2014=full_join(data_2014,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2014)[3:length(names(data_2014))] <- paste0(names(data_2014)[3:length(names(data_2014))], ".2014")
+
+data_2015 = read.csv(files[11],skip=1,header=TRUE)
+for (i in c(12,29,30))
+{ data_2015=full_join(data_2015,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2015)[3:length(names(data_2015))] <- paste0(names(data_2015)[3:length(names(data_2015))], ".2015")
+
+data_2016 = read.csv(files[13],skip=1,header=TRUE)
+for (i in c(14,31,32))
+{ data_2016=full_join(data_2016,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2016)[3:length(names(data_2016))] <- paste0(names(data_2016)[3:length(names(data_2016))], ".2016")
+
+data_2017 = read.csv(files[15],skip=1,header=TRUE)
+for (i in c(16,33,34))
+{ data_2017=full_join(data_2017,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2017)[3:length(names(data_2017))] <- paste0(names(data_2017)[3:length(names(data_2017))], ".2017")
+
+data_2018 = read.csv(files[17],skip=1,header=TRUE)
+for (i in c(18,35,36))
+{ data_2018=full_join(data_2018,read.csv(files[i],skip=1, header=TRUE), by= "id")
+}
+names(data_2018)[3:length(names(data_2018))] <- paste0(names(data_2018)[3:length(names(data_2018))], ".2018")
+```
+
+```{r}
+all_data <- Reduce(function(x, y) merge(x, y, all=TRUE), list(data_2010, data_2011, data_2012,data_2013,data_2014,data_2015,data_2016,data_2017, data_2018))
+all_data
+```
+```{r}
+names = names(all_data)
+margin_of_error_columns = names[grepl("Margin.of.Error",names, fixed=TRUE)]
+ix <- which(names %in% margin_of_error_columns)
+all_data <- all_data[,-ix]
+all_data[is.na(all_data)] = 0
+all_data = all_data[, colSums(all_data != 0) > 0]
+for (i in (names(all_data)))
+{str_replace(i, '-', '')
+str_replace(i, '\\*', '')
+str_replace(i, '\\+', '')}
+i = c(3:6943)
+all_data[,i] <- apply(all_data[ , i], 2, function(x) as.numeric(as.character(x)))
+```
+
+```{r}
+all_data[is.na(all_data)] = 0
+all_data = all_data[, colSums(all_data != 0) > 0]
+g = lm(all_data$Estimate..GROSS.RENT..Median..dollars..2011~all_data$Percent..HOUSING.OCCUPANCY..Vacant.housing.units.2010+all_data$Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate.2010+all_data$Estimate..HOUSING.OCCUPANCY..Total.housing.units.2010+all_data$Percent..HOUSING.OCCUPANCY..Occupied.housing.units.2010+all_data$Percent..HOUSING.TENURE..Renter.occupied.2010+all_data$Percent..VEHICLES.AVAILABLE..No.vehicles.available.2010+all_data$Percent..SELECTED.CHARACTERISTICS..No.telephone.service.available.2010+all_data$Percent..SEX.AND.AGE..Male.2010+all_data$Percent..UNITS.IN.STRUCTURE..1.unit..detached.2010+all_data$Estimate..GROSS.RENT..No.rent.paid.2010+all_data$Percent..UNITS.IN.STRUCTURE..1.unit..detached.2010+all_data$Percent..YEAR.STRUCTURE.BUILT..Built.2005.or.later.2010+all_data$Estimate..ROOMS..Median.rooms.2010+all_data$Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit.2010+all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2000.to.2004.2010+all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010+all_data$Percent..SELECTED.CHARACTERISTICS..Lacking.complete.plumbing.facilities.2010+all_data$Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household.2010+all_data$Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years.2010, na.action=na.exclude)
+#a = step(g)
+summary(g)
+```
+
+```{r}
+all_data
+```
+

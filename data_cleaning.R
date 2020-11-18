@@ -81,11 +81,30 @@ i = c(3:6719)
 all_data[,i] <- apply(all_data[ , i], 2, function(x) as.numeric(as.character(x)))
 all_data$Percent_Change_in_Median_Home_Value_2010_to_2014 <- (all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014 - all_data$Estimate..VALUE..Median..dollars..2010)/(all_data$Estimate..VALUE..Median..dollars..2010)*100
 all_data$Percent_Change_in_Median_Home_Value_2014_to_2018 <- (all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2018 - all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014)/(all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014)*100
+all_data$Percent_Change_in_Recent_Move_In_2010_to_2014 <- (all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later.2014- all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later.2010)/(all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later.2010)*100
+all_data$Percent_Change_in_Gas_Usage_2010_to_2014 <- (all_data$Percent..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas.2014-all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010)/(all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010)*100
+all_data$Percent_Change_in_Plumbing_2010_to_2014 <- (all_data$Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..Lacking.complete.plumbing.facilities.2014-all_data$Percent..SELECTED.CHARACTERISTICS..Lacking.complete.plumbing.facilities.2010)
+all_data$Percent_Change_in_Large_Households_2010_to_2014 <- (all_data$Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household.2014 - all_data$Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household.2010)/(all_data$Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household.2010)*100
+all_data$Percent_Change_in_Children_2010_to_2014 <- (all_data$Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years.2014 - all_data$Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years.2010)/(all_data$Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years.2010)*100
+all_data$Percent_Change_in_Rent_2010_to_2014 <- (all_data$Estimate..GROSS.RENT..Occupied.units.paying.rent..Median..dollars..2014-all_data$Estimate..GROSS.RENT..Median..dollars..2010)/(all_data$Estimate..GROSS.RENT..Median..dollars..2010)*100
+all_data$Percent_Change_in_Income_2010_to_2014 <- (all_data$Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2014.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars..2014-all_data$Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2010.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars..2010)/ (all_data$Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2010.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars..2010)*100
 
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Recent_Move_In_2010_to_2014),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Plumbing_2010_to_2014),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Large_Households_2010_to_2014),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Children_2010_to_2014),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Rent_2010_to_2014),]
+all_data <- all_data[!is.na(all_data$Percent_Change_in_Income_2010_to_2014),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Recent_Move_In_2010_to_2014),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Plumbing_2010_to_2014),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Large_Households_2010_to_2014),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Children_2010_to_2014),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Rent_2010_to_2014),]
+all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Income_2010_to_2014),]
 
 g = lm(all_data$Percent_Change_in_Median_Home_Value_2010_to_2018~all_data$Estimate..UNITS.IN.STRUCTURE..Total.housing.units.2010, na.action=na.exclude)
 summary(g)
@@ -124,26 +143,14 @@ good_names21 = names[grepl('Estimate..GROSS.RENT..Median..dollars',names,fixed=T
 good_names22 = names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2014.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
 #25 covers 2014
 good_names25 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later',names,fixed=TRUE)]
-#26 covers 2018
-good_names26 = names[grepl('Percent.Estimate..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2017.or.later',names,fixed=TRUE)]
-#27 covers 2018
-good_names27 = names[grepl('Percent.Estimate..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas',names,fixed=TRUE)]
 #28 covers 2014
 good_names28 = names[grepl('Percent..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas',names,fixed=TRUE)]
 #29 covers 2014
 good_names29 = names[grepl('Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
-#30 covers 2018
-good_names30 = names[grepl('Percent.Estimate..SELECTED.CHARACTERISTICS..Occupied.housing.units..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
-#31 covers 2018
-good_names31 = names[grepl('Estimate..Renter.occupied.housing.units..Occupied.housing.units..HOUSEHOLD.SIZE..4.or.more.person.household', names,fixed=TRUE)]
-#32 covers 2018
-good_names32= names[grepl('Estimate..Percent.renter.occupied.housing.units..Occupied.housing.units..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.of.householder.under.18.years', names, fixed=TRUE)]
 #33 covers 2014,2018
 good_names33 = names[grepl('Estimate..GROSS.RENT..Occupied.units.paying.rent..Median..dollars',names,fixed=TRUE)]
 #34 covers 2010
 good_names34= names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2010.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
-#35 covers 2018
-good_names35= names[grepl('Estimate..Renter.occupied.housing.units..Occupied.housing.units..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2018.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
 good_names36 = names[grepl('Percent..HOUSING.OCCUPANCY..Total.housing.units..Vacant.housing.units',names,fixed=TRUE)] #2013-2016
 good_names37 = names[grepl('Percent.Estimate..HOUSING.OCCUPANCY..Total.housing.units..Vacant.housing.units',names,fixed=TRUE)] #2017, 2018
 good_names38 = names[grepl('Estimate..HOUSING.OCCUPANCY..Total.housing.units..Homeowner.vacancy.rate',names,fixed=TRUE)] #2017,2018 (Use Estimate not Percent.Estimate)
@@ -169,12 +176,12 @@ good_names55 = names[grepl('Percent.Estimate..ROOMS..Total.housing.units..Median
 good_names56 = names[grepl('Estimate..HOUSING.TENURE..Occupied.housing.units..Average.household.size.of.owner.occupied.unit.2018', names,fixed=TRUE)]  #for goodanames13 2018
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
-               good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, 
-               good_names22, good_names25, good_names26,good_names27,good_names28,good_names29,good_names30, 
-               good_names31,good_names32, good_names33, good_names34, good_names35, good_names36, good_names37, 
-               good_names38, good_names39, good_names40, good_names41,good_names42, good_names43, good_names44, 
+               good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21,
+               good_names22, good_names25, good_names26,good_names27,good_names28,good_names29,good_names30,
+               good_names31,good_names32, good_names33, good_names34, good_names35, good_names36, good_names37,
+               good_names38, good_names39, good_names40, good_names41,good_names42, good_names43, good_names44,
                good_names45, good_names46,good_names47, good_names48, good_names49, good_names50, good_names51,
-               good_names52, good_names53,good_names54, good_names55,good_names56, 
+               good_names52, good_names53,good_names54, good_names55,good_names56,
                'id','Geographic.Area.Name.x','Percent_Change_in_Median_Home_Value_2010_to_2014',
                'Percent_Change_in_Median_Home_Value_2014_to_2018')
 

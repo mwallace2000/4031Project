@@ -101,7 +101,7 @@ good_names10 = names[grepl('Estimate..GROSS.RENT..No.rent.paid',names,fixed=TRUE
 good_names11 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2005.or.later',names,fixed=TRUE)]
 good_names12 = names[grepl('Estimate..ROOMS..Median.rooms',names,fixed=TRUE)]
 good_names13 = names[grepl('Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit',names,fixed=TRUE)]
-good_names14 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later',names,fixed=TRUE)]
+good_names14 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2000.to.2004',names,fixed=TRUE)]
 good_names15 = names[grepl('Percent..HOUSE.HEATING.FUEL..Utility.gas',names,fixed=TRUE)]
 good_names16 = names[grepl('Percent..SELECTED.CHARACTERISTICS..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
 good_names17 = names[grepl('Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household',names,fixed=TRUE)]
@@ -114,10 +114,29 @@ good_names23 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2010.or.later',
 good_names24 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2014.or.later',names,fixed=TRUE)]
 good_names25 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later',names,fixed=TRUE)]
 good_names26 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2017.or.later',names,fixed=TRUE)]
+
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
-               good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, good_names22,
-               good_names23,good_names24,good_names25,good_names26)
+               good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, 
+               good_names22, good_names23, good_names24, good_names25, good_names26,'id',
+               'Geographic.Area.Name.x','Percent_Change_in_Median_Home_Value_2010_to_2018')
 
 ix <- which(names %in% good_names)
 all_data <- all_data[,ix]
+
+census_tracts = list(
+  'Census Tract 4, Fulton County, Georgia',
+  'Census Tract 5, Fulton County, Georgia',
+  'Census Tract 6, Fulton County, Georgia',
+  'Census Tract 7, Fulton County, Georgia',
+  'Census Tract 10.01, Fulton County, Georgia',
+  'Census Tract 10.02, Fulton County, Georgia',
+  'Census Tract 12.02, Fulton County, Georgia',
+  'Census Tract 18, Fulton County, Georgia',
+  'Census Tract 19, Fulton County, Georgia',
+  'Census Tract 21, Fulton County, Georgia',
+  'Census Tract 26, Fulton County, Georgia',
+  'Census Tract 118, Fulton County, Georgia')
+
+
+near_atl_data = all_data[all_data$Geographic.Area.Name.x %in% census_tracts, ]

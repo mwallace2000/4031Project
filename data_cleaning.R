@@ -101,25 +101,53 @@ good_names10 = names[grepl('Estimate..GROSS.RENT..No.rent.paid',names,fixed=TRUE
 good_names11 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2005.or.later',names,fixed=TRUE)]
 good_names12 = names[grepl('Estimate..ROOMS..Median.rooms',names,fixed=TRUE)]
 good_names13 = names[grepl('Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit',names,fixed=TRUE)]
-good_names14 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2000.to.2004',names,fixed=TRUE)]
+#14 covers 2010
+good_names14 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later',names,fixed=TRUE)]
+#15 covers 2010
 good_names15 = names[grepl('Percent..HOUSE.HEATING.FUEL..Utility.gas',names,fixed=TRUE)]
+#16 covers 2010
 good_names16 = names[grepl('Percent..SELECTED.CHARACTERISTICS..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
+#17 covers 2010,2014
 good_names17 = names[grepl('Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household',names,fixed=TRUE)]
+#18 covers 2010,2014
 good_names18 = names[grepl('Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years',names,fixed=TRUE)]
+#19 covers 2010
 good_names19 = names[grepl('Estimate..VALUE..Median..dollars',names,fixed=TRUE)]
+#20 covers 2014,2018
 good_names20 = names[grepl('Estimate..VALUE..Owner.occupied.units..Median..dollars',names,fixed=TRUE)]
+#21 covers 2010
 good_names21 = names[grepl('Estimate..GROSS.RENT..Median..dollars',names,fixed=TRUE)]
-good_names22 = names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2015.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
-good_names23 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2010.or.later',names,fixed=TRUE)]
-good_names24 = names[grepl('Percent..YEAR.STRUCTURE.BUILT..Built.2014.or.later',names,fixed=TRUE)]
+#22 covers 2014
+good_names22 = names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2014.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
+#25 covers 2014
 good_names25 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later',names,fixed=TRUE)]
-good_names26 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2017.or.later',names,fixed=TRUE)]
+#26 covers 2018
+good_names26 = names[grepl('Percent.Estimate..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2017.or.later',names,fixed=TRUE)]
+#27 covers 2018
+good_names27 = names[grepl('Percent.Estimate..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas',names,fixed=TRUE)]
+#28 covers 2014
+good_names28 = names[grepl('Percent..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas',names,fixed=TRUE)]
+#29 covers 2014
+good_names29 = names[grepl('Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
+#30 covers 2018
+good_names30 = names[grepl('Percent.Estimate..SELECTED.CHARACTERISTICS..Occupied.housing.units..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
+#31 covers 2018
+good_names31 = names[grepl('Estimate..Renter.occupied.housing.units..Occupied.housing.units..HOUSEHOLD.SIZE..4.or.more.person.household', names,fixed=TRUE)]
+#32 covers 2018
+good_names32= names[grepl('Estimate..Percent.renter.occupied.housing.units..Occupied.housing.units..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.of.householder.under.18.years', names, fixed=TRUE)]
+#33 covers 2014,2018
+good_names33 = names[grepl('Estimate..GROSS.RENT..Occupied.units.paying.rent..Median..dollars',names,fixed=TRUE)]
+#34 covers 2010
+good_names34= names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2010.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
+#35 covers 2018
+good_names35= names[grepl('Estimate..Renter.occupied.housing.units..Occupied.housing.units..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2018.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars',names,fixed=TRUE)]
+
 
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
                good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21, 
-               good_names22, good_names23, good_names24, good_names25, good_names26,'id',
-               'Geographic.Area.Name.x','Percent_Change_in_Median_Home_Value_2010_to_2018')
+               good_names22, good_names25, good_names26,good_names27,good_names28,good_names29,good_names30, 
+               good_names31,good_names32, good_names33, good_names34, good_names35, 'id','Geographic.Area.Name.x','Percent_Change_in_Median_Home_Value_2010_to_2018')
 
 ix <- which(names %in% good_names)
 all_data <- all_data[,ix]
@@ -137,6 +165,5 @@ census_tracts = list(
   'Census Tract 21, Fulton County, Georgia',
   'Census Tract 26, Fulton County, Georgia',
   'Census Tract 118, Fulton County, Georgia')
-
 
 near_atl_data = all_data[all_data$Geographic.Area.Name.x %in% census_tracts, ]

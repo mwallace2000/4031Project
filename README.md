@@ -1,14 +1,12 @@
 # 4031Project
 
-Please feel free to edit this - I have my files stored on a different path than Kira does.
-
 Next Steps from my perspective:
 
--Create all percentage change columns
+-Finish percentage change columns
 
--Run stepwise regression on these variables, report adjusted r-squared
+-Run stepwise regression on these variables, report adjusted r-squared and AIC
 
--Use to predict 2018 prices, analyze effectiveness of model
+-Use to predict different tracts, report effectiveness
 
 -Develop conclusions and edit slides
 

@@ -4,7 +4,8 @@ library(dplyr)
 library(stats)
 library(DataCombine)
 
-files <- list.files(path ='~/Documents/ISYE 4031/Project/ACS_5year_folder',full.names=TRUE)
+files <- list.files(path ='/Users/ved/Desktop/ACS_5year_folder',full.names=TRUE)
+# files <- list.files(path ='~/Documents/ISYE 4031/Project/ACS_5year_folder',full.names=TRUE)
 
 data_2010 = read.csv(files[1],skip=1,header=TRUE)
 for (i in c(2,19,20))
@@ -123,7 +124,7 @@ good_names22 = names[grepl('Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.I
 good_names25 = names[grepl('Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later',names,fixed=TRUE)]
 #28 covers 2014
 good_names28 = names[grepl('Percent..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas',names,fixed=TRUE)]
-#29 covers 2014
+#29 covers 2014l
 good_names29 = names[grepl('Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..Lacking.complete.plumbing.facilities',names,fixed=TRUE)]
 #33 covers 2014,2018
 good_names33 = names[grepl('Estimate..GROSS.RENT..Occupied.units.paying.rent..Median..dollars',names,fixed=TRUE)]
@@ -148,10 +149,11 @@ good_names51 = names[grepl('Percent.Estimate..SEX.AND.AGE..Total.population..Mal
 
 # ved added
 good_names52 = names[grepl('Estimate..GROSS.RENT..Occupied.units.paying.rent..No.rent.paid.2018', names,fixed=TRUE)] #for goodanames10 2018
-good_names53 = names[grepl('Percent.Estimate..YEAR.STRUCTURE.BUILT..Total.housing.units..Built.2014.or.later.2018', names,fixed=TRUE)]  #for goodanames11 2018
-good_names54 = names[grepl('Estimate..ROOMS..Total.housing.units..Median.rooms.2014', names,fixed=TRUE)]  #for goodanames12 2014
-good_names55 = names[grepl('Percent.Estimate..ROOMS..Total.housing.units..Median.rooms.2018', names,fixed=TRUE)]  #for goodanames12 2018
-good_names56 = names[grepl('Estimate..HOUSING.TENURE..Occupied.housing.units..Average.household.size.of.owner.occupied.unit.2018', names,fixed=TRUE)]  #for goodanames13 2018
+good_names53 = names[grepl('Percent.Margin.of.Error..YEAR.STRUCTURE.BUILT..Total.housing.units..Built.2000.to.2009.2014', names,fixed=TRUE)]  #for goodanames11 2014
+good_names54 = names[grepl('Percent.Estimate..YEAR.STRUCTURE.BUILT..Total.housing.units..Built.2014.or.later.2018', names,fixed=TRUE)]  #for goodanames11 2018
+good_names55 = names[grepl('Estimate..ROOMS..Total.housing.units..Median.rooms.2014', names,fixed=TRUE)]  #for goodanames12 2014
+good_names56 = names[grepl('Percent.Estimate..ROOMS..Total.housing.units..Median.rooms.2018', names,fixed=TRUE)]  #for goodanames12 2018
+good_names57 = names[grepl('Estimate..HOUSING.TENURE..Occupied.housing.units..Average.household.size.of.owner.occupied.unit.2018', names,fixed=TRUE)]  #for goodanames13 2018
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
                good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21,
@@ -159,12 +161,22 @@ good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_
                good_names31,good_names32, good_names33, good_names34, good_names35, good_names36, good_names37,
                good_names38, good_names39, good_names40, good_names41,good_names42, good_names43, good_names44,
                good_names45, good_names46,good_names47, good_names48, good_names49, good_names50, good_names51,
-               good_names52, good_names53,good_names54, good_names55,good_names56,
+               good_names52, good_names53,good_names54, good_names55,good_names56,good_names57,
                'id','Geographic.Area.Name.x','Percent_Change_in_Median_Home_Value_2010_to_2014',
                'Percent_Change_in_Median_Home_Value_2014_to_2018')
 
 ix <- which(names %in% good_names)
 all_data <- all_data[,ix]
+
+
+write.csv(names(data_2014),"/Users/ved/Desktop/ACS_5year_folder\\col.csv", row.names = FALSE)
+
+# veds percent chagne
+all_data$Percent_Change_in_No_Rent_Paid <- 100*((all_data$Estimate..GROSS.RENT..No.rent.paid.2014 - all_data$Estimate..GROSS.RENT..No.rent.paid.2010)/all_data$Estimate..GROSS.RENT..No.rent.paid.2010)
+all_data$Percent_Change_in_Built_2009_2005 <- 100*((all_data$Estimate..GROSS.RENT..No.rent.paid.2014 - all_data$Estimate..GROSS.RENT..No.rent.paid.2010)/all_data$Estimate..GROSS.RENT..No.rent.paid.2010)
+# all_data$Percent_Change_in_Median_Rooms <- 100*((all_data$Estimate..ROOMS..Total.housing.units..Median.rooms.2014 - all_data$Estimate..ROOMS..Median.rooms.2010)/all_data$Estimate..ROOMS..Median.rooms.2010)
+all_data$Percent_Change_in_Average_Household_Size_Owner <- 100*((all_data$Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit.2014 - all_data$Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit.2010)/all_data$Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit.2010)
+  
 
 all_data$Percent_Change_in_Recent_Move_In_2010_to_2014 <- (all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later.2014- all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later.2010)/(all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later.2010)*100
 all_data$Percent_Change_in_Gas_Usage_2010_to_2014 <- (all_data$Percent..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas.2014-all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010)/(all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010)*100
@@ -239,5 +251,6 @@ census_tracts = list(
 
 near_atl_data = pred_data[pred_data$Geographic.Area.Name.x %in% census_tracts, ]
 
-g = lm(near_atl_data$Percent_Change_in_Median_Home_Value_2014_to_2018~., na.action=na.exclude, data=near_atl_data[,c(-1,-2,-4)])
+g = lm(near_atl_data$Percent_Change_in_Median_Home_Value_2014_to_2018~., na.action=na.exclude, newdata=near_atl_data[,c(-1,-2,-4)],)
 summary(g)
+

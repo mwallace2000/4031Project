@@ -4,8 +4,8 @@ library(dplyr)
 library(stats)
 library(DataCombine)
 
-#files <- list.files(path ='/Users/ved/Desktop/ACS_5year_folder',full.names=TRUE)
-files <- list.files(path ='~/Documents/ISYE 4031/Project/ACS_5year_folder',full.names=TRUE)
+files <- list.files(path ='/Users/ved/Desktop/ACS_5year_folder',full.names=TRUE)
+# files <- list.files(path ='~/Documents/ISYE 4031/Project/ACS_5year_folder',full.names=TRUE)
 
 data_2010 = read.csv(files[1],skip=1,header=TRUE)
 for (i in c(2,19,20))
@@ -157,7 +157,7 @@ good_names57 = names[grepl('Estimate..HOUSING.TENURE..Occupied.housing.units..Av
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
                good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21,
-               good_names22, good_names25, good_names26,good_names27,good_names28,good_names29,good_names30,
+               good_names22, good_names25, good_names27,good_names28,good_names29,good_names30,
                good_names31,good_names32, good_names33, good_names34, good_names35, good_names36, good_names37,
                good_names38, good_names39, good_names40, good_names41,good_names42, good_names43, good_names44,
                good_names45, good_names46,good_names47, good_names48, good_names49, good_names50, good_names51,
@@ -178,8 +178,8 @@ all_data$Percent_Change_in_Median_Rooms <- 100*((all_data$Estimate..ROOMS..Total
 all_data$Percent_Change_in_Average_Household_Size_Owner <- 100*((all_data$Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit.2014 - all_data$Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit.2010)/all_data$Estimate..HOUSING.TENURE..Average.household.size.of.owner.occupied.unit.2010)
 
 
-all_data$Percent_Change_in_Recent_Move_In_2010_to_2014 <- (all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later.2014- all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later.2010)/(all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later.2010)*100
-all_data$Percent_Change_in_Gas_Usage_2010_to_2014 <- (all_data$Percent..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas.2014-all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010)/(all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010)*100
+all_data$Percent_Change_in_Recent_Move_In_2010_to_2014 <- (all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Occupied.housing.units..Moved.in.2010.or.later.2014- all_data$Percent..YEAR.HOUSEHOLDER.MOVED.INTO.UNIT..Moved.in.2005.or.later.2010)
+all_data$Percent_Change_in_Gas_Usage_2010_to_2014 <- (all_data$Percent..HOUSE.HEATING.FUEL..Occupied.housing.units..Utility.gas.2014-all_data$Percent..HOUSE.HEATING.FUEL..Utility.gas.2010)
 all_data$Percent_Change_in_Plumbing_2010_to_2014 <- (all_data$Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..Lacking.complete.plumbing.facilities.2014-all_data$Percent..SELECTED.CHARACTERISTICS..Lacking.complete.plumbing.facilities.2010)
 all_data$Percent_Change_in_Large_Households_2010_to_2014 <- (all_data$Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household.2014 - all_data$Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household.2010)/(all_data$Renter.occupied.housing.units..Estimate..HOUSEHOLD.SIZE..4.or.more.person.household.2010)*100
 all_data$Percent_Change_in_Children_2010_to_2014 <- (all_data$Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years.2014 - all_data$Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years.2010)/(all_data$Renter.occupied.housing.units..Estimate..FAMILY.TYPE.AND.PRESENCE.OF.OWN.CHILDREN..No.related.children.under.18.years.2010)*100
@@ -187,15 +187,15 @@ all_data$Percent_Change_in_Rent_2010_to_2014 <- (all_data$Estimate..GROSS.RENT..
 all_data$Percent_Change_in_Income_2010_to_2014 <- (all_data$Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2014.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars..2014-all_data$Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2010.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars..2010)/ (all_data$Occupied.housing.units..Estimate..HOUSEHOLD.INCOME.IN.THE.PAST.12.MONTHS..IN.2010.INFLATION.ADJUSTED.DOLLARS...Median.household.income..dollars..2010)*100
 
 # Kira's percent change
-all_data$Percent_Change_in_Vacant_Housing_Units_2010_to_2014 <- (all_data$Percent..HOUSING.OCCUPANCY..Total.housing.units..Vacant.housing.units.2014 - all_data$Percent..HOUSING.OCCUPANCY..Vacant.housing.units.2010)/all_data$Percent..HOUSING.OCCUPANCY..Vacant.housing.units.2010 * 100
-all_data$Percent_Change_in_Occupied_Housing_Units_2010_to_2014 <- (all_data$Percent..HOUSING.OCCUPANCY..Total.housing.units..Occupied.housing.units.2014 - all_data$Percent..HOUSING.OCCUPANCY..Occupied.housing.units.2010) / all_data$Percent..HOUSING.OCCUPANCY..Occupied.housing.units.2010 * 100
+all_data$Percent_Change_in_Vacant_Housing_Units_2010_to_2014 <- (all_data$Percent..HOUSING.OCCUPANCY..Total.housing.units..Vacant.housing.units.2014 - all_data$Percent..HOUSING.OCCUPANCY..Vacant.housing.units.2010)
+all_data$Percent_Change_in_Occupied_Housing_Units_2010_to_2014 <- (all_data$Percent..HOUSING.OCCUPANCY..Total.housing.units..Occupied.housing.units.2014 - all_data$Percent..HOUSING.OCCUPANCY..Occupied.housing.units.2010)
 all_data$Percent_Change_in_Total_Housing_Units_2010_to_2014 <- (all_data$Estimate..HOUSING.OCCUPANCY..Total.housing.units.2014 - all_data$Estimate..HOUSING.OCCUPANCY..Total.housing.units.2010) / all_data$Estimate..HOUSING.OCCUPANCY..Total.housing.units.2010 * 100
 all_data$Percent_Change_in_Homeowner_Vacancy_Rate_2010_to_2014 <- (all_data$Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate.2014 - all_data$Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate.2010) / all_data$Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate.2010 * 100
-all_data$Percent_Change_in_Renter_Occupied_Housing_Tenure_2010_to_2014 <- (all_data$Percent..HOUSING.TENURE..Occupied.housing.units..Renter.occupied.2014 - all_data$Percent..HOUSING.TENURE..Renter.occupied.2010) / all_data$Percent..HOUSING.TENURE..Renter.occupied.2010 * 100
-all_data$Percent_Change_in_No_Vehicles_Available_2010_to_2014 <- (all_data$Percent..VEHICLES.AVAILABLE..Occupied.housing.units..No.vehicles.available.2014- all_data$Percent..VEHICLES.AVAILABLE..No.vehicles.available.2010)/all_data$Percent..VEHICLES.AVAILABLE..No.vehicles.available.2010 * 100
-all_data$Percent_Change_in_No_Telephone_Service_Availble_2010_to_2014 <- (all_data$Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..No.telephone.service.available.2014- all_data$Percent..SELECTED.CHARACTERISTICS..No.telephone.service.available.2010) / all_data$Percent..SELECTED.CHARACTERISTICS..No.telephone.service.available.2010 * 100
-all_data$Percent_Change_in_Males_2010_to_2014 <- (all_data$Percent..SEX.AND.AGE..Total.population..Male.2014- all_data$Percent..SEX.AND.AGE..Male.2010)/all_data$Percent..SEX.AND.AGE..Male.2010*100
-all_data$Percent_Change_in_Whites_2010_to_2014 <- (all_data$Percent..RACE..Race.alone.or.in.combination.with.one.or.more.other.races..Total.population..White.2014- all_data$Percent..RACE..White.2010)/all_data$Percent..RACE..White.2010*100
+all_data$Percent_Change_in_Renter_Occupied_Housing_Tenure_2010_to_2014 <- (all_data$Percent..HOUSING.TENURE..Occupied.housing.units..Renter.occupied.2014 - all_data$Percent..HOUSING.TENURE..Renter.occupied.2010) 
+all_data$Percent_Change_in_No_Vehicles_Available_2010_to_2014 <- (all_data$Percent..VEHICLES.AVAILABLE..Occupied.housing.units..No.vehicles.available.2014- all_data$Percent..VEHICLES.AVAILABLE..No.vehicles.available.2010)
+all_data$Percent_Change_in_No_Telephone_Service_Availble_2010_to_2014 <- (all_data$Percent..SELECTED.CHARACTERISTICS..Occupied.housing.units..No.telephone.service.available.2014- all_data$Percent..SELECTED.CHARACTERISTICS..No.telephone.service.available.2010) 
+all_data$Percent_Change_in_Males_2010_to_2014 <- (all_data$Percent..SEX.AND.AGE..Total.population..Male.2014- all_data$Percent..SEX.AND.AGE..Male.2010)
+all_data$Percent_Change_in_Whites_2010_to_2014 <- (all_data$Percent..RACE..Race.alone.or.in.combination.with.one.or.more.other.races..Total.population..White.2014- all_data$Percent..RACE..White.2010)
 
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Recent_Move_In_2010_to_2014),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Plumbing_2010_to_2014),]
@@ -303,7 +303,9 @@ a.cv=cv.glmnet(x_vars,y_var,standardize = TRUE)
 best_lam <- a.cv$lambda.min
 best_lam
 a.glmnet <- glmnet(x_vars,y_var,lambda=a.cv$lambda.min,standardize=TRUE)
-summary(a.glmnet)
+summ_A = summary(a.glmnet)
+summ_A$which
 rmse(predict.glmnet(a.glmnet,newx=x_vars), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
+
 
 

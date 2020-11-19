@@ -87,9 +87,6 @@ all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2014_to
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
 
-g = lm(all_data$Percent_Change_in_Median_Home_Value_2010_to_2018~all_data$Estimate..UNITS.IN.STRUCTURE..Total.housing.units.2010, na.action=na.exclude)
-summary(g)
-
 names = names(all_data)
 good_names1 = names[grepl('Percent..HOUSING.OCCUPANCY..Vacant.housing.units',names,fixed=TRUE)] #2010-2012
 good_names2 = names[grepl('Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate',names,fixed=TRUE)] #2010-2016
@@ -221,6 +218,11 @@ all_data <- all_data[!is.infinite(all_data$Percent_Change_in_No_Telephone_Servic
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Males_2010_to_2014),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Whites_2010_to_2014),]
 
+names = names(all_data)
+pred_names <- c(names[grepl('Percent_Change_in',names,fixed=TRUE)],'id','Geographic.Area.Name.x')
+ix <- which(names %in% pred_names)
+pred_data <- all_data[,ix]
+
 census_tracts = list(
   'Census Tract 4, Fulton County, Georgia',
   'Census Tract 5, Fulton County, Georgia',
@@ -235,5 +237,7 @@ census_tracts = list(
   'Census Tract 26, Fulton County, Georgia',
   'Census Tract 118, Fulton County, Georgia')
 
-near_atl_data = all_data[all_data$Geographic.Area.Name.x %in% census_tracts, ]
+near_atl_data = pred_data[pred_data$Geographic.Area.Name.x %in% census_tracts, ]
 
+g = lm(near_atl_data$Percent_Change_in_Median_Home_Value_2014_to_2018~., na.action=na.exclude, data=near_atl_data[,c(-1,-2,-4)])
+summary(g)

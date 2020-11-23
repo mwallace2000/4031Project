@@ -253,8 +253,9 @@ pred_data <- all_data[,ix]
 
 # Shape/ Summary of Data
 ```{r}
-
+plot(pred_data)
 ```
+It appears that some of our data points are highly correlated with change in median home value, and others are not.
 
 # Initial multiple linear regression
 ```{r}

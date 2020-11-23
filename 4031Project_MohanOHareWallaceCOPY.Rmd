@@ -2,24 +2,21 @@
 title: "4031Project_MohanOHareWallace"
 author: "Ved Mohan"
 date: "11/21/2020"
-output:
-  word_document: default
-  html_document: default
+output: word_document
 ---
-# Introduction
 
-Gentrification describes the phenomenon where longtime lower income residents in urban centers are pushed out of their homes as wealthier people move into certain areas, consequentially raising household values to the point existing residents may not be able to afford to continue living there.   Historically, this has served as a reflection of class and ethnic marginalization.  Although it happens naturally and no one party is at fault for its occurrence, gentrification negatively impacts marginalized groups especially in large cities and policy makers must intervene to protect existing residents from dislocation.  When considering how to counter gentrification, one of the most important preliminary steps is to first identify the census tracts or neighborhoods it is most likely to occur in.  Data analysts can aid policy makers in this task by performing a regression considering variables that might increase the likelihood of a particular census tract to undergo gentrification.
+# Introduction
+Gentrification describes the phenomenon where longtime lower income residents in urban centers are pushed out of their homes as wealthier people move into certain areas, consequentially raising household values to the point existing residents may not be able to afford to continue living there. Historically, this has served as a reflection of class and ethnic marginalization.  Although it happens naturally and no one party is at fault for its occurrence, gentrification negatively impacts marginalized groups especially in large cities and policy makers must intervene to protect existing residents from dislocation.  When considering how to counter gentrification, one of the most important preliminary steps is to first identify the census tracts or neighborhoods it is most likely to occur in.  Data analysts can aid policy makers in this task by performing a regression considering variables that might increase the likelihood of a particular census tract to undergo gentrification.
 
 For this project, we decided to stay local and look into Fulton Country census tracts.  The way we decided to do our prediction is by creating models trained on census data from 2010-2014 and then used to predict the 2014-2018 percent change in median house value.  We decided to focus on median housing value as the primary metric we want to predict because it is the primary consequence of gentrification and causes the migration problems that policy makers try to mitigate.  Knowing this information could be vital in planning next steps for intervention.
-
-# Data Collection
 
 We decided on using the American Community Survey (ACS) data available on census.gov as our primary data source.  The ACS is a wide-scale and comprehensive survey that provides information such as educational attainment, housing characteristics, etc. on a geospatial level for the United States every year.  The data is actually implemented by policy makers and helps decide how over 675 billion dollars of government funds are distributed annually.  ACS data comes in 1-year and 5-year estimates where the 5-year aggregate data is an average over 5 years.  5-year data tends to capture overall trends more reliably but falls short in recognizing rapid changes that occur on a yearly basis.  Even with this shortcoming, we figured the 5-year data would be more appropriate as our data source because it would be more reliable in terms of finding trends of rising housing prices.  
 
 One consideration we had when using the data is that the bounds of census tracts are redrawn every decennial census, meaning that we should ideally use a 10-year timeframe to avoid changes in census bounds that could cause inconsistencies and might take away from the variables we are trying to look at.  The data we downloaded were the 5-year estimates for housing characteristics, demographic characteristics, and economic characteristics in Fulton Country for the years 2010-2018.  This resulted in a zip file of 36 CSV files.
 
 # Required imports
-```{r,include=FALSE}
+Importing packages purrr, readr, dplyr, stats, DataCombine, stringr, MASS, car
+```{r echo=FALSE, include=FALSE}
 library(purrr)
 library(readr)
 library(dplyr)
@@ -28,10 +25,12 @@ library(DataCombine)
 library(stringr)
 library(MASS)
 library(glmnet)
+library(car)
 rmse <- function(x,y) sqrt(mean((x-y)^2))
 ```
 
 # Directory and data attachments
+Each years csv file was accessed and added individually. An example can be seen below.
 ```{r}
 files <- list.files(path ='/Users/ved/Desktop/ACS_5year_folder',full.names=TRUE)
 
@@ -39,7 +38,10 @@ data_2010 = read.csv(files[1],skip=1,header=TRUE)
 for (i in c(2,19,20)){ data_2010=full_join(data_2010,read.csv(files[i],skip=1, header=TRUE), by= "id")}
 names(data_2010)[3:length(names(data_2010))] <- paste0(names(data_2010)[3:length(names(data_2010))], ".2010")
 # attach(data_2010)
+head(data_2010)
+```
 
+```{r echo=FALSE, include=FALSE}
 data_2011 = read.csv(files[3],skip=1,header=TRUE)
 for (i in c(4,21,22)){ data_2011=full_join(data_2011,read.csv(files[i],skip=1, header=TRUE), by= "id")}
 names(data_2011)[3:length(names(data_2011))] <- paste0(names(data_2011)[3:length(names(data_2011))], ".2011")
@@ -84,10 +86,10 @@ all_data <- Reduce(function(x, y) merge(x, y, all=TRUE), list(data_2010, data_20
 ```
 
 # Data cleaning
-
 Because we had so many separate CSV files containing information for each census tract in Fulton country, we had to figure out how to combine them into one comprehensive data file.  We went about this by merging each of the CSV files by their id column which is a unique geographic identifier.  One of the biggest challenges we faced was figuring out how to preserve the time aspect of the columns.  Each CSV had a different year in the name, but nowhere in the data file itself was the year reflected.  In order to prevent multiple columns with the same name in the merging process, we added a suffix of the form ‘.Year’ to each column name in each of the individual CSV files before merging.  After this process, we ended up with a large data frame consisting of 204 census tracts and 13,877 columns.  Obviously, we cannot use all of these columns as predictors because it would cause overfitting in our model.  Based on research we had done on the social indicators of gentrification, we were able to trim the amount of columns to 166.  These variables included things such as median household income, percent male population, vacancy rates, etc.  We did not have 166 variables, but because we had different column names for each year from 2010 to 2018 and oftentimes the same statistic for different data files would have slightly different column names, it created a lot of columns.  In order to further reduce this and capture the change over time better, we decided that we would calculate the percent change from 2010 to 2014 of all of our variables.  The goal was to then use these percent change calculations as predictors for the percent change of median housing values from 2014-2018.  After making these calculations, our columns reduced to 23 (2 of which are geospatial identifier columns).  In the process of making percent change calculations, we had to get rid of some census tracts that had NAs or 0 which reduced our census tracts from 204 to 131.
 
-```{r}
+```{r warning=FALSE, echo=FALSE, include=FALSE}
+# supressWarnings(as.numeric())
 all_data[is.na(all_data)] = 0 #Set nas to 0
 i = c(3:13877) # all non string columns (1 and 2 are census tract and name respectively)
 all_data[,i] <- apply(all_data[ , i], 2, function(x) as.numeric(as.character(x))) 
@@ -105,13 +107,17 @@ for (i in (names(all_data)))
     }
 
 i = c(3:6719)
-all_data[,i] <- apply(all_data[ , i], 2, function(x) as.numeric(as.character(x)))
+all_data[,i] <- apply(all_data[ , i], 2, function(x) as.numeric(as.character(x))) 
 ```
 
 # Individual identification of columns
+Using previous academic work, large body of parameter were manually selected. An example is shown below:
 ```{r}
 names = names(all_data)
 good_names1 = names[grepl('Percent..HOUSING.OCCUPANCY..Vacant.housing.units',names,fixed=TRUE)] #2010-2012
+```
+
+```{r echo=FALSE, include=FALSE}
 good_names2 = names[grepl('Estimate..HOUSING.OCCUPANCY..Homeowner.vacancy.rate',names,fixed=TRUE)] #2010-2016
 good_names3 = names[grepl('Estimate..HOUSING.OCCUPANCY..Total.housing.units.201',names,fixed=TRUE)] #2010-2018 (use only estimate. not percent.estimate)
 good_names4 = names[grepl('Percent..HOUSING.OCCUPANCY..Occupied.housing.units',names,fixed=TRUE)] #2010-2012
@@ -161,6 +167,12 @@ good_names55 = names[grepl('Estimate..ROOMS..Total.housing.units..Median.rooms.2
 good_names56 = names[grepl('Percent.Estimate..ROOMS..Total.housing.units..Median.rooms.2018', names,fixed=TRUE)]  #for goodanames12 2018
 good_names57 = names[grepl('Estimate..HOUSING.TENURE..Occupied.housing.units..Average.household.size.of.owner.occupied.unit.2018', names,fixed=TRUE)]  #for goodanames13 2018
 
+#write.csv(names(data_2014),"/Users/ved/Desktop/ACS_5year_folder\\col.csv", row.names = FALSE)
+```
+
+Once these columns were compiled, the data set was reduced to size
+```{r}
+dim(all_data)
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,good_names8,good_names9,good_names10,
                good_names11,good_names12,good_names13,good_names14, good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,
                good_names21,good_names22, good_names25, good_names28,good_names29,
@@ -172,13 +184,17 @@ good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_
 
 ix <- which(names %in% good_names)
 all_data <- all_data[,ix]
-
-#write.csv(names(data_2014),"/Users/ved/Desktop/ACS_5year_folder\\col.csv", row.names = FALSE)
+dim(all_data)
 ```
+As shown, all_data reduced by x to y
 
 # Percent Change Calculations
+In order to compare the time frames, the percent change from 2010 to 2014 was caluclated.
 ```{r}
 all_data$Percent_Change_in_Median_Home_Value_2010_to_2014 <- (all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014 - all_data$Estimate..VALUE..Median..dollars..2010)/(all_data$Estimate..VALUE..Median..dollars..2010)*100
+```
+
+```{r echo=FALSE, include=FALSE}
 all_data$Percent_Change_in_Median_Home_Value_2014_to_2018 <- (all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2018 - all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014)/(all_data$Estimate..VALUE..Owner.occupied.units..Median..dollars..2014)*100
 all_data$Percent_Change_in_No_Rent_Paid <- (all_data$Estimate..GROSS.RENT..No.rent.paid.2014 - all_data$Estimate..GROSS.RENT..No.rent.paid.2010)
 all_data$Percent_Change_in_Built_2009_2005 <-(all_data$Percent..YEAR.STRUCTURE.BUILT..Total.housing.units..Built.2010.or.later - all_data$Percent..YEAR.STRUCTURE.BUILT..Built.2005.or.later.2010)
@@ -202,9 +218,12 @@ all_data$Percent_Change_in_Males_2010_to_2014 <- (all_data$Percent..SEX.AND.AGE.
 all_data$Percent_Change_in_Whites_2010_to_2014 <- (all_data$Percent..RACE..Race.alone.or.in.combination.with.one.or.more.other.races..Total.population..White.2014- all_data$Percent..RACE..White.2010)/all_data$Percent..RACE..White.2010*100
 ```
 
-# Individual column NA adjustments
-```{r,include=FALSE}
+Columns NA entries were adjusted
+```{r}
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
+```
+
+```{r echo=FALSE, include=FALSE}
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Recent_Move_In_2010_to_2014),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Plumbing_2010_to_2014),]
@@ -226,9 +245,12 @@ all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Rooms),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Average_Household_Size_Owner),]
 ```
 
-# Individual column infinity adjustments
-```{r,include=FALSE}
+Similarly, infinity entries were adjustmed
+```{r}
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
+```
+
+```{r echo=FALSE, include=FALSE}
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Recent_Move_In_2010_to_2014),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Plumbing_2010_to_2014),]
@@ -250,7 +272,6 @@ all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Rooms),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Average_Household_Size_Owner),]
 ```
 
-Given a large number of columns, we will identify significant variables using a stepwise regression.
 # Definining predicted data set
 ```{r}
 names <- names(all_data)
@@ -260,14 +281,14 @@ pred_data <- all_data[,ix]
 ```
 
 # Shape/ Summary of Data
-```{r}
+```{r warning=FALSE, results='hide'}
 plot(pred_data)
 plot(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018,pred_data$Percent_Change_in_Median_Home_Value_2010_to_2014)
 ```
 It appears that some of our data points are highly correlated with change in median home value, and others are not. However, all correlations do appear linear, so we should not need to include any quadratic or logarithmic terms. In addition, our 2014 to 2018 change in home value does not appear to be strongly correlated to the 2010 to 2014 change.
 
 # Initial multiple linear regression
-```{r}
+```{r echo=TRUE, include=FALSE}
 full.model <- lm(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018~., na.action=na.exclude, data=pred_data[,c(-1,-2,-4)],x=TRUE)
 rmse(predict(full.model,pred_data[,-4]), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 plot(full.model$fitted.values,full.model$residuals)
@@ -276,17 +297,19 @@ sum(coef(full.model)!=0)
 sum(abs(coef(full.model)))
 avplots(full.model)
 ```
+The mutiple regression model carries an adjusted r^2 of .. Given a large number of columns, we will identify significant variables using a stepwise regression.
 
 # Stepwise Regression
-```{r}
+```{r warning=FALSE, results='hide'}
 g.step <- step(full.model)
-# summary(g.step)
+summary(g.step)
+rmse(predict(g.step,pred_data), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 rmse(predict(g.step,pred_data), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 ```
 As seen above, we have been able to eliminate a few variables, and have been able to lower our adjusted r-squared significantly. Interestingly, income, which we expected to be significant, was not, but it was recently removed from the model, so we will continue to utilize it in our next regression with interactions. We have too few data points to include interactions in our original stepwise regression, but found that we could instead do a stepwise regression on the selected variables from a stepwise multiple linear regression on our original data set.
 
-# Stepwise Regression 
-```{r}
+# Stepwise Regression v2
+```{r warning=FALSE, echo=TRUE, include=FALSE}
 g_stepmodel = lm(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018~
               (pred_data$Percent_Change_in_No_Rent_Paid+
               pred_data$Percent_Change_in_Built_2009_2005+
@@ -311,9 +334,7 @@ rmse(predict(g_stepinteractionmodel,pred_data), pred_data$Percent_Change_in_Medi
 # Conclusion
 Based on our final stepwise model with interactions, we find that 80.79% of the variability in housing prices can be explained by changes in people not paying rent, people moving in, access to plumbing, number of large households, percent of families with children, number of occupied housing units, number of total housing units, homeowner vacancy rate, percentage of males, percentage of whites, and income, as well as interactions between these variables.
 
-As we only considered Atlanta-area data, we only see the trends expressed from the Atlanta data. We also did not have access to all the variables that we would want to test for impact on gentrification, so future analysis would be needed to quantify the impact of education and other factors.
-
-
 # Appendix
 ## A
+
 

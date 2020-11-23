@@ -4,8 +4,8 @@ library(dplyr)
 library(stats)
 library(DataCombine)
 
-#files <- list.files(path ='/Users/ved/Desktop/ACS_5year_folder',full.names=TRUE)
-files <- list.files(path ='~/Documents/ISYE 4031/Project/ACS_5year_folder',full.names=TRUE)
+files <- list.files(path ='/Users/ved/Desktop/ACS_5year_folder',full.names=TRUE)
+# files <- list.files(path ='~/Documents/ISYE 4031/Project/ACS_5year_folder',full.names=TRUE)
 
 data_2010 = read.csv(files[1],skip=1,header=TRUE)
 for (i in c(2,19,20))
@@ -157,7 +157,7 @@ good_names57 = names[grepl('Estimate..HOUSING.TENURE..Occupied.housing.units..Av
 good_names = c(good_names1,good_names2,good_names3,good_names4,good_names5,good_names6,good_names7,
                good_names8,good_names9,good_names10,good_names11,good_names12,good_names13,good_names14,
                good_names15,good_names16,good_names17,good_names18,good_names19,good_names20,good_names21,
-               good_names22, good_names25, good_names26,good_names27,good_names28,good_names29,good_names30,
+               good_names22, good_names25, good_names27,good_names28,good_names29,good_names30,
                good_names31,good_names32, good_names33, good_names34, good_names35, good_names36, good_names37,
                good_names38, good_names39, good_names40, good_names41,good_names42, good_names43, good_names44,
                good_names45, good_names46,good_names47, good_names48, good_names49, good_names50, good_names51,
@@ -314,4 +314,12 @@ plot(pred_data[,c(5,6,9,11,12,13,17,18,19,23,24,15)])
 plot(g_interaction.step$fitted.values,g_interaction.step$residuals, xlab='Fitted Values',ylab='Residuals')
 abline(h=0,col=2)
 names(g_interaction.step)
+pred_data[c(-1, -2 -20,-32,-27,-82,-8,-30,-124), c(-1, -2)]
+pairs(pred_data[c(-1, -2 -20,-32,-27,-82,-8,-30,-124), c(-1, -2, 2, 3, 4, 5, 6)])
+nrow(pred_data[c(-1, -2 -20,-32,-27,-82,-8,-30,-124), c(-1, -2)])
+
+library(dotwhisker)
+library(broom)
+library(dplyr)
+dwplot(g_interaction)
 

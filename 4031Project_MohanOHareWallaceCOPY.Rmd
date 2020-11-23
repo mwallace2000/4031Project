@@ -336,7 +336,11 @@ Based on our final stepwise model with interactions, we find that 80.79% of the 
 
 As we only considered Atlanta-area data, we only see the trends expressed from the Atlanta data. We also did not have access to all the variables that we would want to test for impact on gentrification, so future analysis would be needed to quantify the impact of education and other factors.
 
+# Contributions
+Ved Mohan: Report writing, code organization, code formulation 
+Kira O'Hare: Report writing, data gathering, variable selection
+Michael Wallace: Regression formulation, slide writing, variable selection
+
 # Appendix
 ## A
-
 

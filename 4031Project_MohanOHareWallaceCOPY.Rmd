@@ -262,8 +262,9 @@ pred_data <- all_data[,ix]
 # Shape/ Summary of Data
 ```{r}
 plot(pred_data)
+plot(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018,pred_data$Percent_Change_in_Median_Home_Value_2010_to_2014)
 ```
-It appears that some of our data points are highly correlated with change in median home value, and others are not. However, all correlations do appear linear, so we should not need to include any quadratic or logarithmic terms.
+It appears that some of our data points are highly correlated with change in median home value, and others are not. However, all correlations do appear linear, so we should not need to include any quadratic or logarithmic terms. In addition, our 2014 to 2018 change in home value does not appear to be strongly correlated to the 2010 to 2014 change.
 
 # Initial multiple linear regression
 ```{r}

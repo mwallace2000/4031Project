@@ -242,7 +242,7 @@ all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Rooms),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Average_Household_Size_Owner),]
 ```
 
-Given a vast amount of data, we will identify significant variables using an X regression
+Given a large number of columns, we will identify significant variables using a stepwise regression.
 # Definining predicted data set
 ```{r}
 names <- names(all_data)
@@ -255,7 +255,7 @@ pred_data <- all_data[,ix]
 ```{r}
 plot(pred_data)
 ```
-It appears that some of our data points are highly correlated with change in median home value, and others are not.
+It appears that some of our data points are highly correlated with change in median home value, and others are not. However, all correlations do appear linear, so we should not need to include any quadratic or logarithmic terms.
 
 # Initial multiple linear regression
 ```{r}

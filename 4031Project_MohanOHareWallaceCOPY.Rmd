@@ -334,6 +334,8 @@ rmse(predict(g_stepinteractionmodel,pred_data), pred_data$Percent_Change_in_Medi
 # Conclusion
 Based on our final stepwise model with interactions, we find that 80.79% of the variability in housing prices can be explained by changes in people not paying rent, people moving in, access to plumbing, number of large households, percent of families with children, number of occupied housing units, number of total housing units, homeowner vacancy rate, percentage of males, percentage of whites, and income, as well as interactions between these variables.
 
+As we only considered Atlanta-area data, we only see the trends expressed from the Atlanta data. We also did not have access to all the variables that we would want to test for impact on gentrification, so future analysis would be needed to quantify the impact of education and other factors.
+
 # Appendix
 ## A
 

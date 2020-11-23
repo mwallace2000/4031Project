@@ -15,8 +15,9 @@ We decided on using the American Community Survey (ACS) data available on census
 One consideration we had when using the data is that the bounds of census tracts are redrawn every decennial census, meaning that we should ideally use a 10-year timeframe to avoid changes in census bounds that could cause inconsistencies and might take away from the variables we are trying to look at.  The data we downloaded were the 5-year estimates for housing characteristics, demographic characteristics, and economic characteristics in Fulton Country for the years 2010-2018.  This resulted in a zip file of 36 CSV files.
 
 # Required imports
-Importing packages purrr, readr, dplyr, stats, DataCombine, stringr, MASS, car
+Importing packages purrr, readr, dplyr, stats, DataCombine, stringr, MASS, cars, dotwhisker, broom
 ```{r echo=FALSE, include=FALSE}
+par(mar=c(0.5,0.5,0.5,0.5))
 library(purrr)
 library(readr)
 library(dplyr)
@@ -26,6 +27,9 @@ library(stringr)
 library(MASS)
 library(glmnet)
 library(car)
+library(CARS)
+library(dotwhisker)
+library(broom)
 rmse <- function(x,y) sqrt(mean((x-y)^2))
 ```
 
@@ -38,7 +42,7 @@ data_2010 = read.csv(files[1],skip=1,header=TRUE)
 for (i in c(2,19,20)){ data_2010=full_join(data_2010,read.csv(files[i],skip=1, header=TRUE), by= "id")}
 names(data_2010)[3:length(names(data_2010))] <- paste0(names(data_2010)[3:length(names(data_2010))], ".2010")
 # attach(data_2010)
-head(data_2010)
+head(data_2010[1:5,1:3])
 ```
 
 ```{r echo=FALSE, include=FALSE}
@@ -282,7 +286,10 @@ pred_data <- all_data[,ix]
 
 # Shape/ Summary of Data
 ```{r warning=FALSE, results='hide'}
-plot(pred_data)
+# par(mar = rep(2, 4))
+graphics.off()
+plot(pred_data[,3:5])
+
 plot(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018,pred_data$Percent_Change_in_Median_Home_Value_2010_to_2014)
 ```
 It appears that some of our data points are highly correlated with change in median home value, and others are not. However, all correlations do appear linear, so we should not need to include any quadratic or logarithmic terms. In addition, our 2014 to 2018 change in home value does not appear to be strongly correlated to the 2010 to 2014 change.
@@ -295,7 +302,7 @@ plot(full.model$fitted.values,full.model$residuals)
 abline(h=0,col=2)
 sum(coef(full.model)!=0)
 sum(abs(coef(full.model)))
-avplots(full.model)
+avPlots(full.model)
 ```
 The mutiple regression model carries an adjusted r^2 of .. Given a large number of columns, we will identify significant variables using a stepwise regression.
 
@@ -343,4 +350,5 @@ Michael Wallace: Regression formulation, slide writing, variable selection
 
 # Appendix
 ## A
+
 

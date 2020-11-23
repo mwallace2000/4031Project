@@ -263,6 +263,7 @@ rmse(predict(full.model,pred_data[,-4]), pred_data$Percent_Change_in_Median_Home
 plot(resid(full.model))
 sum(coef(full.model)!=0)
 sum(abs(coef(full.model)))
+avplots(full.model)
 ```
 
 # Stepwise Regression
@@ -295,9 +296,8 @@ rmse(predict(g_stepinteractionmodel,pred_data), pred_data$Percent_Change_in_Medi
 
 ```
 
-
 # Conclusion
-
+Based on these 
 
 # Appendix
 ## A

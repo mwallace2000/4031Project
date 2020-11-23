@@ -245,7 +245,7 @@ all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Average_Household_S
 Given a vast amount of data, we will identify significant variables using an X regression
 # Definining predicted data set
 ```{r}
-names = names(all_data)
+names <- names(all_data)
 pred_names <- c(names[grepl('Percent_Change_in',names,fixed=TRUE)],'id','Geographic.Area.Name.x')
 ix <- which(names %in% pred_names)
 pred_data <- all_data[,ix]
@@ -270,9 +270,8 @@ avplots(full.model)
 # Stepwise Regression
 ```{r}
 g.step <- step(full.model)
-summary(g.step)
+# summary(g.step)
 rmse(predict(g.step,pred_data), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
-
 ```
 As seen above, we have been able to eliminate a few variables, and have been able to lower our adjusted r-squared significantly. Interestingly, income, which we expected to be significant, was not, but it was recently removed from the model, so we will continue to utilize it in our next regression with interactions. We have too few data points to include interactions in our original stepwise regression, but found that we could instead do a stepwise regression on the selected variables from a stepwise multiple linear regression on our original data set.
 

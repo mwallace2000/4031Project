@@ -271,6 +271,7 @@ It appears that some of our data points are highly correlated with change in med
 full.model <- lm(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018~., na.action=na.exclude, data=pred_data[,c(-1,-2,-4)],x=TRUE)
 rmse(predict(full.model,pred_data[,-4]), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 plot(full.model$fitted.values,full.model$residuals)
+abline(h=0,col=2)
 sum(coef(full.model)!=0)
 sum(abs(coef(full.model)))
 avplots(full.model)
@@ -302,6 +303,7 @@ g_stepmodel = lm(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018~
 g_stepinteractionmodel <- step(g_stepmodel)
 summary(g_stepinteractionmodel)
 plot(g_stepinteractionmodel$fitted.values,g_stepinteractionmodel$residuals)
+abline(h=0,col=2)
 rmse(predict(g_stepinteractionmodel,pred_data), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 
 ```

@@ -273,7 +273,7 @@ summary(g.step)
 rmse(predict(g.step,pred_data), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 
 ```
-As seen above x,y,z are significant. Carried forward with interactions in stepwise regression
+As seen above, we have been able to eliminate a few variables, and have been able to lower our adjusted r-squared significantly. Interestingly, income, which we expected to be significant, was not, but it was recently removed from the model, so we will continue to utilize it in our next regression with interactions. We have too few data points to include interactions in our original stepwise regression, but found that we could instead do a stepwise regression on the selected variables from a stepwise multiple linear regression on our original data set.
 
 # Stepwise Regression 
 ```{r}

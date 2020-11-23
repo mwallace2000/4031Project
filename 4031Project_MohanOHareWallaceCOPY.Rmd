@@ -19,7 +19,7 @@ We decided on using the American Community Survey (ACS) data available on census
 One consideration we had when using the data is that the bounds of census tracts are redrawn every decennial census, meaning that we should ideally use a 10-year timeframe to avoid changes in census bounds that could cause inconsistencies and might take away from the variables we are trying to look at.  The data we downloaded were the 5-year estimates for housing characteristics, demographic characteristics, and economic characteristics in Fulton Country for the years 2010-2018.  This resulted in a zip file of 36 CSV files.
 
 # Required imports
-```{r}
+```{r,include=FALSE}
 library(purrr)
 library(readr)
 library(dplyr)
@@ -203,7 +203,7 @@ all_data$Percent_Change_in_Whites_2010_to_2014 <- (all_data$Percent..RACE..Race.
 ```
 
 # Individual column NA adjustments
-```{r}
+```{r,include=FALSE}
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Recent_Move_In_2010_to_2014),]
@@ -227,7 +227,7 @@ all_data <- all_data[!is.na(all_data$Percent_Change_in_Average_Household_Size_Ow
 ```
 
 # Individual column infinity adjustments
-```{r}
+```{r,include=FALSE}
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2014_to_2018),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Recent_Move_In_2010_to_2014),]

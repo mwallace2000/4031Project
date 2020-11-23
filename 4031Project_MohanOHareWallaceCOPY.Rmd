@@ -115,7 +115,7 @@ all_data[,i] <- apply(all_data[ , i], 2, function(x) as.numeric(as.character(x))
 ```
 
 # Individual identification of columns
-Using previous academic work, large body of parameter were manually selected. An example is shown below:
+Using previous academic work that identified potential causes of gentrification, large body of parameters were manually selected. An example is shown below:
 ```{r}
 names = names(all_data)
 good_names1 = names[grepl('Percent..HOUSING.OCCUPANCY..Vacant.housing.units',names,fixed=TRUE)] #2010-2012
@@ -190,7 +190,7 @@ ix <- which(names %in% good_names)
 all_data <- all_data[,ix]
 dim(all_data)
 ```
-As shown, all_data reduced by x to y
+As shown, all_data keeps the same number of rows, but loses the vast majority of its columns, which we considered to be superfluous to our analysis.
 
 # Percent Change Calculations
 In order to compare the time frames, the percent change from 2010 to 2014 was caluclated.
@@ -222,7 +222,7 @@ all_data$Percent_Change_in_Males_2010_to_2014 <- (all_data$Percent..SEX.AND.AGE.
 all_data$Percent_Change_in_Whites_2010_to_2014 <- (all_data$Percent..RACE..Race.alone.or.in.combination.with.one.or.more.other.races..Total.population..White.2014- all_data$Percent..RACE..White.2010)/all_data$Percent..RACE..White.2010*100
 ```
 
-Columns NA entries were adjusted
+Rows with NA values were removed.
 ```{r}
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
 ```
@@ -249,7 +249,7 @@ all_data <- all_data[!is.na(all_data$Percent_Change_in_Median_Rooms),]
 all_data <- all_data[!is.na(all_data$Percent_Change_in_Average_Household_Size_Owner),]
 ```
 
-Similarly, infinity entries were adjustmed
+Similarly, rows with infinite entries were also removed.
 ```{r}
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Home_Value_2010_to_2014),]
 ```
@@ -304,7 +304,7 @@ sum(coef(full.model)!=0)
 sum(abs(coef(full.model)))
 avPlots(full.model)
 ```
-The mutiple regression model carries an adjusted r^2 of .. Given a large number of columns, we will identify significant variables using a stepwise regression.
+The mutiple regression model carries an adjusted r^2 of .. Given the large number of columns, we will identify significant variables using a stepwise regression.
 
 # Stepwise Regression
 ```{r warning=FALSE, results='hide'}
@@ -342,6 +342,8 @@ rmse(predict(g_stepinteractionmodel,pred_data), pred_data$Percent_Change_in_Medi
 Based on our final stepwise model with interactions, we find that 80.79% of the variability in housing prices can be explained by changes in people not paying rent, people moving in, access to plumbing, number of large households, percent of families with children, number of occupied housing units, number of total housing units, homeowner vacancy rate, percentage of males, percentage of whites, and income, as well as interactions between these variables.
 
 As we only considered Atlanta-area data, we only see the trends expressed from the Atlanta data. We also did not have access to all the variables that we would want to test for impact on gentrification, so future analysis would be needed to quantify the impact of education and other factors.
+
+However, from this data, we can see that there are a few major factors in determining gentrification, and that these should be focal areas for those concerned about being priced out of their current living situations.
 
 # Contributions
 Ved Mohan: Report writing, code organization, code formulation 

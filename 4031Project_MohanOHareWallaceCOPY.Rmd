@@ -21,11 +21,15 @@ library(dplyr)
 library(stats)
 library(DataCombine)
 library(stringr)
+library(MASS)
+library(glmnet)
+rmse <- function(x,y) sqrt(mean((x-y)^2))
 ```
 
 # Directory and data attachments
 ```{r}
 files <- list.files(path ='/Users/ved/Desktop/ACS_5year_folder',full.names=TRUE)
+
 data_2010 = read.csv(files[1],skip=1,header=TRUE)
 for (i in c(2,19,20)){ data_2010=full_join(data_2010,read.csv(files[i],skip=1, header=TRUE), by= "id")}
 names(data_2010)[3:length(names(data_2010))] <- paste0(names(data_2010)[3:length(names(data_2010))], ".2010")
@@ -249,30 +253,50 @@ pred_data <- all_data[,ix]
 
 # Shape/ Summary of Data
 ```{r}
-plot(pred_data)
+
 ```
 
-
-# Stepwise Regression (change to forward/backward for variety and flow?)
+# Initial multiple linear regression
 ```{r}
+full.model <- lm(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018~., na.action=na.exclude, data=pred_data[,c(-1,-2,-4)],x=TRUE)
+rmse(predict(full.model,pred_data[,-4]), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
+plot(resid(full.model))
+sum(coef(full.model)!=0)
+sum(abs(coef(full.model)))
+```
+
+# Stepwise Regression
+```{r}
+g.step <- step(full.model)
+summary(g.step)
+rmse(predict(g.step,pred_data), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 
 ```
 As seen above x,y,z are significant. Carried forward with interactions in stepwise regression
 
 # Stepwise Regression 
 ```{r}
+g_stepmodel = lm(pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018~
+              (pred_data$Percent_Change_in_No_Rent_Paid+
+              pred_data$Percent_Change_in_Built_2009_2005+
+              pred_data$Percent_Change_in_Recent_Move_In_2010_to_2014+
+              pred_data$Percent_Change_in_Plumbing_2010_to_2014+
+              pred_data$Percent_Change_in_Large_Households_2010_to_2014+
+              pred_data$Percent_Change_in_Children_2010_to_2014+
+              pred_data$Percent_Change_in_Occupied_Housing_Units_2010_to_2014+
+              pred_data$Percent_Change_in_Total_Housing_Units_2010_to_2014+
+              pred_data$Percent_Change_in_Homeowner_Vacancy_Rate_2010_to_2014+
+              pred_data$Percent_Change_in_Males_2010_to_2014+
+              pred_data$Percent_Change_in_Whites_2010_to_2014+
+              pred_data$Percent_Change_in_Income_2010_to_2014)^2 ,na.action=na.exclude, data=pred_data[,c(-1,-2,-4)],x=TRUE)
+g_stepinteractionmodel <- step(g_stepmodel)
+summary(g_stepinteractionmodel)
+rmse(predict(g_stepinteractionmodel,pred_data), pred_data$Percent_Change_in_Median_Home_Value_2014_to_2018)
 
 ```
-Confirm/deny suspicions
 
-# Lasso to confirm results
-```{r}
-
-```
-For thoroughness
 
 # Conclusion
-After examining this census tract data and running our regressions, we have found that housing price changes in later time periods can be predicted fairly well by changes over time in the values of several important variables and their interactions. This indicates that we will likely be able to predict the gentrification in the next few years based on recent changes, and can potentially export this model to tracts outside the city of Atlanta and its surrounding regions.
 
 
 # Appendix

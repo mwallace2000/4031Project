@@ -242,7 +242,7 @@ all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Median_Rooms),]
 all_data <- all_data[!is.infinite(all_data$Percent_Change_in_Average_Household_Size_Owner),]
 ```
 
-Given a vast amount of data, we will identify significant variables using an X regression
+Given a large number of columns, we will identify significant variables using a stepwise regression.
 # Definining predicted data set
 ```{r}
 names = names(all_data)
